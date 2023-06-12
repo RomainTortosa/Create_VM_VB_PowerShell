@@ -1,0 +1,37 @@
+---
+- name: Création de la machine virtuelle
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    vboxmanage_path: "C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe"
+    vm_name: NewVM
+    vdi_path: C:\\Path\\To\\VirtualBox\\NewVM.vdi
+    disk_size: 10000
+
+  tasks:
+    - name: Créer la machine virtuelle
+      win_shell: |
+        "{{ vboxmanage_path }}" createvm --name "{{ vm_name }}" --register
+      changed_when: false
+
+    - name: Configurer les paramètres de la machine virtuelle
+      win_shell: |
+        "{{ vboxmanage_path }}" modifyvm "{{ vm_name }}" --memory 2048 --acpi on --boot1 dvd --nic1 nat
+      changed_when: false
+
+    - name: Créer le disque dur virtuel
+      win_shell: |
+        "{{ vboxmanage_path }}" createhd --filename "{{ vdi_path }}" --size "{{ disk_size }}"
+      changed_when: false
+
+    - name: Attacher le disque dur virtuel à la machine virtuelle
+      win_shell: |
+        "{{ vboxmanage_path }}" storagectl "{{ vm_name }}" --name "SATA Controller" --add sata --controller IntelAhci
+        "{{ vboxmanage_path }}" storageattach "{{ vm_name }}" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "{{ vdi_path }}"
+      changed_when: false
+
+    - name: Démarrer la machine virtuelle
+      win_shell: |
+        "{{ vboxmanage_path }}" startvm "{{ vm_name }}" --type headless
+      changed_when: false
