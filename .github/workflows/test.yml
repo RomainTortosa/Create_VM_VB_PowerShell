@@ -1,0 +1,19 @@
+name: Deploy documentation
+on:
+  push:
+    branches:
+      - master      
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Deploy Doc
+        run: |
+          python3 -m venv venv && source venv/bin/activate
+          python3 -m pip install robot-to-jira
+          python3 -m robot_to_jira
+    
