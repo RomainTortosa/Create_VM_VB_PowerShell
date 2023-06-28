@@ -21,3 +21,8 @@ shell
 Copy code
 ansible-playbook create_vm.yml
 Cela exécutera le playbook et créera la machine virtuelle avec VirtualBox sur Windows en utilisant les commandes PowerShell appropriées.
+
+### Create VM Hyper V PowerShell
+Assurez-vous de personnaliser les valeurs des variables en fonction de vos besoins. Le script crée une nouvelle VM avec un nom donné, une certaine quantité de mémoire (en bytes), un chemin pour le disque virtuel (VHD) et un commutateur virtuel spécifié. Ensuite, il démarre la VM.
+
+N'oubliez pas d'exécuter ce script en tant qu'administrateur pour avoir les autorisations nécessaires pour gérer Hyper-V.
